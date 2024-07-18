@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import sys
 import re
-from signal import signal, SIGINT
 
 def print_stats(total_size, status_codes):
     """Prints the accumulated metrics."""
@@ -19,12 +18,6 @@ def main():
         r'(?P<ip>\d+\.\d+\.\d+\.\d+) - \[(?P<date>.+)\] "GET /projects/260 HTTP/1\.1" (?P<status>\d{3}) (?P<size>\d+)'
     )
     
-    def signal_handler(sig, frame):
-        print_stats(total_size, status_codes)
-        sys.exit(0)
-    
-    signal(SIGINT, signal_handler)
-    
     try:
         for line in sys.stdin:
             match = log_pattern.match(line)
@@ -41,7 +34,7 @@ def main():
                     print_stats(total_size, status_codes)
     except KeyboardInterrupt:
         print_stats(total_size, status_codes)
-        raise
+        sys.exit(0)
 
     print_stats(total_size, status_codes)
 
