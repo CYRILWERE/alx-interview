@@ -10,13 +10,13 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
     
-    # Initialize DP array with a large number (total + 1) since total is the max needed
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0
+    # Initialize dp array to total+1, which is effectively "infinity"
+    dp = [total + 1] * (total + 1)
+    dp[0] = 0  # Base case: 0 coins needed to make 0 amount
     
     for coin in coins:
         for x in range(coin, total + 1):
             dp[x] = min(dp[x], dp[x - coin] + 1)
     
-    return dp[total] if dp[total] != float('inf') else -1
+    return dp[total] if dp[total] <= total else -1
 
